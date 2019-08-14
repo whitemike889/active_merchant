@@ -135,6 +135,7 @@ module ActiveMerchant #:nodoc:
         add_echo(post, options)
         add_submerchant_id(post, options)
         add_transaction_type(post, options)
+        add_processor(post, options)
 
         commit(:purchase, post)
       end
@@ -149,6 +150,7 @@ module ActiveMerchant #:nodoc:
         add_echo(post, options)
         add_submerchant_id(post, options)
         add_transaction_type(post, options)
+        add_processor(post, options)
 
         commit(:authorize, post)
       end
@@ -160,6 +162,7 @@ module ActiveMerchant #:nodoc:
         add_customer_data(post, options)
         add_echo(post, options)
         add_submerchant_id(post, options)
+        add_processor(post, options)
 
         commit(:capture, post)
       end
@@ -171,6 +174,7 @@ module ActiveMerchant #:nodoc:
         add_echo(post, options)
         add_submerchant_id(post, options)
         post[:a1] = generate_unique_id
+        add_processor(post, options)
 
         commit(:void, post, reference_action)
       end
@@ -182,6 +186,7 @@ module ActiveMerchant #:nodoc:
         add_customer_data(post, options)
         add_echo(post, options)
         add_submerchant_id(post, options)
+        add_processor(post, options)
 
         commit(:refund, post)
       end
@@ -195,6 +200,7 @@ module ActiveMerchant #:nodoc:
         add_echo(post, options)
         add_submerchant_id(post, options)
         add_transaction_type(post, options)
+        add_processor(post, options)
 
         commit(:credit, post)
       end
@@ -306,6 +312,11 @@ module ActiveMerchant #:nodoc:
 
       def add_transaction_type(post, options)
         post[:a9] = options[:transaction_type] if options[:transaction_type]
+      end
+
+      def add_processor(post, options)
+        post[:r1] = options[:processor] if options[:processor]
+        post[:r2] = options[:processor_merchant_id] if options[:processor_merchant_id]
       end
 
       ACTIONS = {

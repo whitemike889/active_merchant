@@ -268,6 +268,17 @@ class RemoteCredoraxTest < Test::Unit::TestCase
     assert_cvv_scrubbed(clean_transcript)
   end
 
+  def test_purchase_passes_processor
+    # returns a successful response when a valid processor is sent
+    assert good_response = @gateway.purchase(@amount, @credit_card, @options.merge(fixtures(:credorax_with_processor)))
+    assert_success good_response
+    assert_equal 'Succeeded', good_response.message
+
+    # returns a failed response when an invalid processor is sent
+    assert bad_response = @gateway.purchase(@amount, @credit_card, @options.merge(processor: 'invalid'))
+    assert_failure bad_response
+  end
+
   # #########################################################################
   # # CERTIFICATION SPECIFIC REMOTE TESTS
   # #########################################################################
